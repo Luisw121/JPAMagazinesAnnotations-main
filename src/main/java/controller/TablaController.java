@@ -1,5 +1,8 @@
 package controller;
 
+import model.Caja;
+import model.Skin;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.io.BufferedReader;
@@ -37,30 +40,143 @@ public class TablaController {
         }
     }
     public void eliminarTablas() {
-
         EntityTransaction transaction = entityManager.getTransaction();
+
         try {
             transaction.begin();
-            //Lectura
-            String sqlScript;
-            try (BufferedReader br = new BufferedReader(new FileReader("/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/schema.sql"))){
-                sqlScript = br.lines().collect(Collectors.joining(" \n"));
-            }catch (IOException e) {
-                throw new RuntimeException("Error al leer el archivo " + e);
-            }
-            sqlScript = sqlScript.replaceAll("DROP TABLE", "DROP TABLE IF EXISTS");
 
-            entityManager.createNativeQuery(sqlScript).executeUpdate();
+            //sentencias sql para eliminar las tablas de la bsd
+            entityManager.createNativeQuery("DROP TABLE IF EXISTS Datos_Armas").executeUpdate();
+            entityManager.createNativeQuery("DROP TABLE IF EXISTS Datos_Llaves").executeUpdate();
+            entityManager.createNativeQuery("DROP TABLE IF EXISTS Datos_Skins").executeUpdate();
+            entityManager.createNativeQuery("DROP TABLE IF EXISTS Nombre_Cajas").executeUpdate();
 
             transaction.commit();
-            System.out.println("Se han eliminado las tablas");
+            System.out.println("Se han eliminado las tablas de la base de datos.");
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
+            e.printStackTrace();
+
+        }
+    }
+    public void poblarTablas() {
+        poblarDatosArmas();
+        poblarDatosLlaves();
+        poblarDatosSkins();
+        poblarNombreCajas();
+    }
+
+    private void poblarNombreCajas() {
+        try(BufferedReader br = new BufferedReader(new FileReader("/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/schema.sql"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                Caja nombreCaja = new Caja();
+                nombreCaja.setNombre(line);
+                entityManager.persist(nombreCaja);
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void poblarDatosSkins() {
+        try(BufferedReader br = new BufferedReader(new FileReader("/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/schema.sql"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(", ");
+                Skin skin = new Skin();
+                skin.setNombre(data[0].replace("\"", "").trim());
+                entityManager.persist(skin);
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void poblarDatosLlaves() {
+        try(BufferedReader br = new BufferedReader(new FileReader("/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/schema.sql"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void poblarDatosArmas() {
+        try(BufferedReader br = new BufferedReader(new FileReader("/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/schema.sql"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+
+            }
+
+        }catch (IOException e) {
             e.printStackTrace();
         }
     }
 
 }
+/*
+private void poblarDatosLlaves() {
+        String csvFile = "ruta/al/archivo/Llaves.csv";
+        String line = "";
+        String cvsSplitBy = ",";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            // Leemos el archivo línea por línea
+            while ((line = br.readLine()) != null) {
+                // Dividimos la línea por comas para obtener los valores individuales
+                String[] data = line.split(cvsSplitBy);
+
+                // Creamos una nueva instancia de Llave y la poblamos con los datos del archivo CSV
+                Llave llave = new Llave();
+                llave.setNombre(data[0]);
+                llave.setPrecio(new BigDecimal(data[1]));
+
+                // Convertimos las cajas que abre a una lista y la asociamos a la llave
+                List<String> cajasQueAbre = new ArrayList<>();
+                for (int i = 2; i < data.length; i++) {
+                    cajasQueAbre.add(data[i]);
+                }
+                llave.setCajasQueAbre(cajasQueAbre.toArray(new String[0]));
+
+                // Persistimos la instancia en la base de datos
+                entityManager.persist(llave);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void poblarDatosArmas() {
+        String csvFile = "ruta/al/archivo/Armas.csv";
+        String line = "";
+        String cvsSplitBy = ",";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            // Leemos el archivo línea por línea
+            while ((line = br.readLine()) != null) {
+                // Dividimos la línea por comas para obtener los valores individuales
+                String[] data = line.split(cvsSplitBy);
+
+                // Creamos una nueva instancia de Arma y la poblamos con los datos del archivo CSV
+                Arma arma = new Arma();
+                arma.setNombre(data[0]);
+                arma.setDamageLMB(data[1]);
+                arma.setDamageRMB(data[2]);
+                arma.setKillAward(data[3]);
+                arma.setRunningSpeed(data[4]);
+                arma.setSide(data[5]);
+
+                // Persistimos la instancia en la base de datos
+                entityManager.persist(arma);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+ */

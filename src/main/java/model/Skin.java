@@ -18,6 +18,9 @@ public class Skin {
 
     @Column(name = "Nombre_skin")
     private String nombre;
+    public Skin(){
+
+    }
 
     public Skin(Long id, Caja caja, String nombre) {
         this.id = id;

@@ -19,6 +19,9 @@ public class Llave {
     @Column(name = "Caja")
     private List<String> cajasQueAbre;
 
+    public Llave() {
+
+    }
     public Llave(String nombre, BigDecimal precio, List<String> cajasQueAbre) {
         this.nombre = nombre;
         this.precio = precio;

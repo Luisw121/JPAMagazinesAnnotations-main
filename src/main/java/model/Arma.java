@@ -27,6 +27,9 @@ public class Arma {
 
     @Column(name = "Side")
     private String side;
+    public Arma() {
+
+    }
 
     public Arma(Long id, String nombre, Integer damageLMB, Integer damageRMB, String killAward, Double runningSpeed, String side) {
         this.id = id;

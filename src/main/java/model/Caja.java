@@ -13,6 +13,8 @@ public class Caja {
     @Column(name = "Nombre_caja")
     private String nombre;
 
+    public Caja(){}
+
     public Caja(Long id, String nombre) {
         this.id = id;
         this.nombre = nombre;
