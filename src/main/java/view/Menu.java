@@ -18,8 +18,15 @@ public class Menu {
 
             System.out.println(" \nMENU PRINCIPAL \n");
 
-            System.out.println("1. Carrega dades. ");
-            System.out.println("2. Consulta dades. ");
+            System.out.println("1. Crear Tablas ");//Listo
+            System.out.println("2. Eliminar Tablas. ");//
+            System.out.println("3. Mostrar Tablas");//
+            System.out.println("4. Poblar Masivamente las tablas");//
+            System.out.println("5. Seleccionar todos los elementos que contengan u ntexto en concretp");//
+            System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//
+            System.out.println("7. Modificación de diferentes registros");//
+            System.out.println("8. ELimincación de un registro en concreto");//
+            System.out.println("9. Eliminación de un conjunto de registros");//
 
             System.out.println("0. Sortir. ");
 

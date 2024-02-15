@@ -1,40 +1,26 @@
-CREATE TABLE autors
-(
-  id_autor integer NOT NULL,
-  nom character varying(30) NOT NULL,
-  any_naixement character(4),
-  nacionalitat character varying(12),
-  actiu boolean NOT NULL,
-  CONSTRAINT pk_autors PRIMARY KEY (id_autor)
+CREATE TABLE Datos_Armas (
+    ID_arma SERIAL PRIMARY KEY,
+    Nombre_arma VARCHAR(100),
+    Damage_LMB INTEGER,
+    Damage_RMB INTEGER,
+    Kill_Award VARCHAR(50),
+    Running_Speed FLOAT,
+    Side VARCHAR(50)
 );
 
-
-
-CREATE TABLE revistes
-(
-  id_revista serial NOT NULL,
-  titol character varying(30) NOT NULL,
-  data_publicacio date NOT NULL ,
-  CONSTRAINT pk_revistes PRIMARY KEY (id_revista),
-  CONSTRAINT uk_titol UNIQUE (titol)
+CREATE TABLE Datos_Llaves (
+    Nombre_llave VARCHAR(100),
+    Precio_llave DECIMAL(10, 2),
+    Caja_que_abre VARCHAR(255) ARRAY
 );
 
-
-CREATE TABLE articles
-(
-  id_article serial NOT NULL,
-  id_revista integer,
-  id_autor integer NOT NULL,
-  titol character varying(30) NOT NULL,
-  data_creacio date ,
-  publicable boolean NOT NULL,
-  CONSTRAINT pk_articles PRIMARY KEY (id_article),
-  CONSTRAINT fk_art_revistes FOREIGN KEY (id_revista)
-      REFERENCES revistes (id_revista) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT fk_articles_autors FOREIGN KEY (id_autor)
-      REFERENCES autors (id_autor) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT uk_articles UNIQUE (titol)  
+CREATE TABLE Nombre_Cajas (
+    ID_caja SERIAL PRIMARY KEY,
+    Nombre_caja VARCHAR(100)
 );
 
+CREATE TABLE Datos_Skins (
+    ID_skin SERIAL PRIMARY KEY,
+    Nombre_caja INTEGER REFERENCES Nombre_Cajas(ID_caja),
+    Nombre_skin VARCHAR(100)
+);

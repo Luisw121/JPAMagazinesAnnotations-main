@@ -1,12 +1,9 @@
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
-import controller.ArticleController;
-import controller.AuthorController;
-import controller.MagazineController;
-import model.*;
+import controller.TablaController;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -15,6 +12,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import view.Menu;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -34,6 +32,7 @@ public class Main {
         }
     }
 
+
     public static EntityManagerFactory createEntityManagerFactory() {
         EntityManagerFactory emf;
         try {
@@ -46,61 +45,60 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        ArrayList<Magazine> revistes = new ArrayList();
-
+        Scanner scanner = new Scanner(System.in);
         EntityManagerFactory entityManagerFactory = createEntityManagerFactory();
 
-        AuthorController authorController = new AuthorController(entityManagerFactory);
-        ArticleController articleController = new ArticleController(entityManagerFactory);
-        MagazineController magazineController = new MagazineController(entityManagerFactory);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        TablaController tablaController = new TablaController(entityManager);
 
+        tablaController.crearTablas();
         Menu menu = new Menu();
         int opcio;
-        opcio = menu.mainMenu();
+        do {
+            System.out.println("Menú:");
+            System.out.println("1. Crear tablas en la base de datos");
+            System.out.println("2. Eliminar Tablas. ");//
+            System.out.println("3. Mostrar Tablas");//
+            System.out.println("4. Poblar Masivamente las tablas");//
+            System.out.println("5. Seleccionar todos los elementos que contengan u ntexto en concretp");//
+            System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//
+            System.out.println("7. Modificación de diferentes registros");//
+            System.out.println("8. ELimincación de un registro en concreto");//
+            System.out.println("9. Eliminación de un conjunto de registros");//
+            System.out.print("Seleccione una opción: ");
+            opcio = scanner.nextInt();
 
-        switch (opcio) {
-
-            case 1:
-
-                System.out.println("1!!");
-                try {
-
-                    List<Author> authors = authorController.readAuthorsFile("src/main/resources/autors.txt");
-                    List<Magazine> magazines = articleController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/revistes.txt", "src/main/resources/autors.txt");
-                    List<Article> articles = articleController.readArticlesFile("src/main/resources/articles.txt", "src/main/resources/autors.txt");
-
-                    System.out.println("Revistes llegides des del fitxer");
-                    for (int i = 0; i < magazines.size(); i++) {
-                        System.out.println(magazines.get(i).toString() + "\n");
-                        for (int j = 0; j < magazines.get(i).getArticles().size(); j++) {
-                            Author author = magazines.get(i).getArticles().get(j).getAuthor();
-                            authorController.addAuthor(author);
-
-                            System.out.println("EL AUTOR:");
-                            System.out.println(author);
-
-                            Article article = magazines.get(i).getArticles().get(j);
-                            article.setAuthor(author);
-
-                            System.out.println("EL ARTICLE:");
-                            System.out.println(article);
-
-                            articleController.addArticle(article);
-                        }
-
-                        magazineController.addMagazine(magazines.get(i));
-                    }
-
-                } catch (NumberFormatException | IOException e) {
-                    e.printStackTrace();
-                }
-                break;
-
-            default:
-                System.out.println("Adeu!!");
-                System.exit(1);
-                break;
-
-        }
+            switch (opcio) {
+                case 1:
+                    tablaController.crearTablas();
+                    break;
+                case 2:
+                    tablaController.eliminarTablas();
+                    break;
+                case 3:
+                    //
+                    break;
+                case 4:
+                    //
+                    break;
+                case 5:
+                    //
+                    break;
+                case 6:
+                    //
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    System.out.println("Saliendo del programa..");
+                    break;
+                default:
+                    System.out.println("Opción no válid. Inténtalo de nuevo.");
+            }
+        }while (opcio !=3);
+        entityManager.close();
+        entityManagerFactory.close();
     }
 }
