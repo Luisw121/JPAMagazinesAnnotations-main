@@ -56,10 +56,10 @@ public class Main {
         int opcio;
         do {
             System.out.println("Menú:");
-            System.out.println("1. Crear tablas en la base de datos");
-            System.out.println("2. Eliminar Tablas. ");//
-            System.out.println("3. Mostrar Tablas");//
-            System.out.println("4. Poblar Masivamente las tablas");//
+            System.out.println("1. Crear tablas en la base de datos");//LISTO
+            System.out.println("2. Eliminar Tablas. ");//LISTO
+            System.out.println("3. Poblar Masivamente las tablas");//
+            System.out.println("4. Mostrar Tablas");//
             System.out.println("5. Seleccionar todos los elementos que contengan u ntexto en concretp");//
             System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//
             System.out.println("7. Modificación de diferentes registros");//
@@ -76,7 +76,7 @@ public class Main {
                     tablaController.eliminarTablas();
                     break;
                 case 3:
-                    //
+                    tablaController.poblarTablas();
                     break;
                 case 4:
                     //

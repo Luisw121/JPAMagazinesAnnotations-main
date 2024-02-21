@@ -1,5 +1,6 @@
 package controller;
 
+import model.Arma;
 import model.Caja;
 import model.Skin;
 
@@ -59,7 +60,6 @@ public class TablaController {
                 transaction.rollback();
             }
             e.printStackTrace();
-
         }
     }
     public void poblarTablas() {
@@ -70,8 +70,10 @@ public class TablaController {
     }
 
     private void poblarNombreCajas() {
-        try(BufferedReader br = new BufferedReader(new FileReader("/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/schema.sql"))) {
-            String line;
+        String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/nombre_cajas.csv";
+        String line = "";
+
+        try(BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
                 Caja nombreCaja = new Caja();
                 nombreCaja.setNombre(line);
@@ -83,8 +85,9 @@ public class TablaController {
     }
 
     private void poblarDatosSkins() {
-        try(BufferedReader br = new BufferedReader(new FileReader("/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/schema.sql"))) {
-            String line;
+        String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_skins.csv";
+        String line = "";
+        try(BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(", ");
                 Skin skin = new Skin();
@@ -97,8 +100,9 @@ public class TablaController {
     }
 
     private void poblarDatosLlaves() {
-        try(BufferedReader br = new BufferedReader(new FileReader("/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/schema.sql"))) {
-            String line;
+        String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_llaves.csv";
+        String line = "";
+        try(BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
             while ((line = br.readLine()) != null) {
 
             }
@@ -106,19 +110,45 @@ public class TablaController {
             e.printStackTrace();
         }
     }
+    public void poblarDatosArmas() {
+            String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_armas.csv";
+            String line = "";
 
-    private void poblarDatosArmas() {
-        try(BufferedReader br = new BufferedReader(new FileReader("/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/schema.sql"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
+            try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+                while ((line = br.readLine()) != null) {
+                    String[] data = line.split(",");
 
+                    Arma arma = new Arma();
+                    arma.setNombre(data[0]);
+                    arma.setDamageLMB(parseInteger(data[1]));
+                    arma.setDamageRMB(parseInteger(data[2]));
+                    arma.setKillAward(data[3]);
+                    arma.setRunningSpeed(parseDouble(data[4]));
+                    arma.setSide(data[5]);
+
+                    entityManager.persist(arma);
+                }
+                System.out.println("Datos de armas insertados correctamente");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-        }catch (IOException e) {
-            e.printStackTrace();
         }
-    }
 
+        private Integer parseInteger(String value) {
+            try {
+                return Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+
+        private Double parseDouble(String value) {
+            try {
+                return Double.parseDouble(value);
+            } catch (NumberFormatException e) {
+                return 0.0;
+            }
+        }
 }
 /*
 private void poblarDatosLlaves() {
