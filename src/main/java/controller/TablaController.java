@@ -2,6 +2,7 @@ package controller;
 
 import model.Arma;
 import model.Caja;
+import model.Llave;
 import model.Skin;
 
 import javax.persistence.EntityManager;
@@ -9,6 +10,9 @@ import javax.persistence.EntityTransaction;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class TablaController {
@@ -64,9 +68,72 @@ public class TablaController {
     }
     public void poblarTablas() {
         poblarDatosArmas();
-        poblarDatosLlaves();
-        poblarDatosSkins();
-        poblarNombreCajas();
+        //poblarDatosLlaves();
+        //poblarDatosSkins();
+        //poblarNombreCajas();
+    }
+    public void poblarDatosArmas() {
+        String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_armas.csv";
+
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try(BufferedReader br = new BufferedReader(new FileReader(csvFile))){
+            transaction.begin();
+            String line;
+            br.readLine();
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+
+
+                Arma arma = new Arma();
+                arma.setNombre(data[0]);
+                arma.setDamageLMB(Integer.parseInt(data[1]));
+                arma.setDamageRMB(Integer.parseInt(data[2]));
+                arma.setKillAward(data[3]);
+                arma.setRunningSpeed(Double.parseDouble(data[4]));
+                arma.setSide(data[5]);
+
+                entityManager.persist(arma);
+            }
+            transaction.commit();
+            System.out.println("Se han poblado los datos de armas");
+
+        }catch (IOException e) {
+            if (transaction.isActive()) {
+                transaction.rollback(); // Revertir la transacción en caso de error
+            }
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            if (transaction.isActive()) {
+                transaction.rollback(); // Revertir la transacción en caso de error
+            }
+            System.out.println("No se pudo convertir un valor numérico");
+            e.printStackTrace();
+        }
+    }
+    private void poblarDatosLlaves() {
+        String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_llaves.csv";
+        try(BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+
+                Llave llave = new Llave();
+                llave.setNombre(data[0]);
+                llave.setPrecio(new BigDecimal(data[1]));
+
+                List<String> cajaQueAbre = new ArrayList<>();
+                for (int i = 2; i < data.length; i++) {
+                    cajaQueAbre.add(data[1]);
+
+                }
+                llave.setCajasQueAbre(cajaQueAbre);
+
+                entityManager.persist(llave);
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void poblarNombreCajas() {
@@ -98,57 +165,6 @@ public class TablaController {
             e.printStackTrace();
         }
     }
-
-    private void poblarDatosLlaves() {
-        String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_llaves.csv";
-        String line = "";
-        try(BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-            while ((line = br.readLine()) != null) {
-
-            }
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public void poblarDatosArmas() {
-            String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_armas.csv";
-            String line = "";
-
-            try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
-                while ((line = br.readLine()) != null) {
-                    String[] data = line.split(",");
-
-                    Arma arma = new Arma();
-                    arma.setNombre(data[0]);
-                    arma.setDamageLMB(parseInteger(data[1]));
-                    arma.setDamageRMB(parseInteger(data[2]));
-                    arma.setKillAward(data[3]);
-                    arma.setRunningSpeed(parseDouble(data[4]));
-                    arma.setSide(data[5]);
-
-                    entityManager.persist(arma);
-                }
-                System.out.println("Datos de armas insertados correctamente");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private Integer parseInteger(String value) {
-            try {
-                return Integer.parseInt(value);
-            } catch (NumberFormatException e) {
-                return 0;
-            }
-        }
-
-        private Double parseDouble(String value) {
-            try {
-                return Double.parseDouble(value);
-            } catch (NumberFormatException e) {
-                return 0.0;
-            }
-        }
 }
 /*
 private void poblarDatosLlaves() {

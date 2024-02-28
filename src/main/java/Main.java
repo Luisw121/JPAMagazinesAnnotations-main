@@ -92,7 +92,7 @@ public class Main {
                 case 8:
                     break;
                 case 9:
-                    System.out.println("Saliendo del programa..");
+                    System.out.println("Saliendo del programa.");
                     break;
                 default:
                     System.out.println("Opción no válid. Inténtalo de nuevo.");
