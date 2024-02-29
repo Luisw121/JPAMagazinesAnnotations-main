@@ -22,7 +22,7 @@ public class Menu {
             System.out.println("2. Eliminar Tablas. ");//
             System.out.println("3. Mostrar Tablas");//
             System.out.println("4. Poblar Masivamente las tablas");//
-            System.out.println("5. Seleccionar todos los elementos que contengan u ntexto en concretp");//
+            System.out.println("5. Seleccionar todos los elementos que contengan un texto en concreto");//
             System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//
             System.out.println("7. Modificación de diferentes registros");//
             System.out.println("8. ELimincación de un registro en concreto");//
