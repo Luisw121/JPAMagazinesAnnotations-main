@@ -12,9 +12,8 @@ public class Skin {
     @Column(name = "ID_skin")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "Nombre_caja")
-    private Caja caja;
+    @Column(name = "Nombre_caja")
+    private String caja;
 
     @Column(name = "Nombre_skin")
     private String nombre;
@@ -22,8 +21,7 @@ public class Skin {
 
     }
 
-    public Skin(Long id, Caja caja, String nombre) {
-        this.id = id;
+    public Skin(String caja, String nombre) {
         this.caja = caja;
         this.nombre = nombre;
     }
@@ -36,11 +34,11 @@ public class Skin {
         this.id = id;
     }
 
-    public Caja getCaja() {
+    public String getCaja() {
         return caja;
     }
 
-    public void setCaja(Caja caja) {
+    public void setCaja(String caja) {
         this.caja = caja;
     }
 

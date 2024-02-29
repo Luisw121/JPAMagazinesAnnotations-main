@@ -69,7 +69,7 @@ public class TablaController {
     public void poblarTablas() {
         poblarDatosArmas();
         poblarDatosLlaves();
-        //poblarDatosSkins();
+        poblarDatosSkins();
         poblarNombreCajas();
     }
     public void poblarDatosArmas() {
@@ -195,15 +195,32 @@ public class TablaController {
 
     private void poblarDatosSkins() {
         String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_skins.csv";
-        String line = "";
+
+        EntityTransaction transaction = entityManager.getTransaction();
+
         try(BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            transaction.begin();
+            String line;
+            br.readLine();
+
             while ((line = br.readLine()) != null) {
-                String[] data = line.split(", ");
-                Skin skin = new Skin();
-                skin.setNombre(data[0].replace("\"", "").trim());
+
+                line = line.replaceAll("\"", "");
+                String[] data = line.split(",");
+
+                String nombreCaja = data[0];
+                String nombreSkin = data[1];
+
+                Skin skin = new Skin(nombreCaja, nombreSkin);
+
                 entityManager.persist(skin);
             }
+            transaction.commit();
+            System.out.println("Se han poblado los datos de skins");
         }catch (IOException e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
             e.printStackTrace();
         }
     }

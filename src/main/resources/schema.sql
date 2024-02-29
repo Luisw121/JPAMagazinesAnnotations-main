@@ -21,6 +21,6 @@ CREATE TABLE Nombre_Cajas (
 
 CREATE TABLE Datos_Skins (
     ID_skin SERIAL PRIMARY KEY,
-    Nombre_caja INTEGER REFERENCES Nombre_Cajas(ID_caja),
+    Nombre_caja VARCHAR(100),
     Nombre_skin VARCHAR(100)
 );
