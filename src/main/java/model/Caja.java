@@ -15,8 +15,8 @@ public class Caja {
 
     public Caja(){}
 
-    public Caja(Long id, String nombre) {
-        this.id = id;
+    public Caja(String nombre) {
+
         this.nombre = nombre;
     }
 

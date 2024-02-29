@@ -70,7 +70,7 @@ public class TablaController {
         poblarDatosArmas();
         poblarDatosLlaves();
         //poblarDatosSkins();
-        //poblarNombreCajas();
+        poblarNombreCajas();
     }
     public void poblarDatosArmas() {
         String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_armas.csv";
@@ -168,15 +168,27 @@ public class TablaController {
 
     private void poblarNombreCajas() {
         String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/nombre_cajas.csv";
-        String line = "";
+        EntityTransaction transaction = entityManager.getTransaction();
 
         try(BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            transaction.begin();
+            String line;
+            br.readLine();
             while ((line = br.readLine()) != null) {
-                Caja nombreCaja = new Caja();
-                nombreCaja.setNombre(line);
-                entityManager.persist(nombreCaja);
+
+                line = line.replaceAll("\"", "");
+                String nombreCaja = line.trim();
+
+                Caja caja = new Caja(nombreCaja);
+
+                entityManager.persist(caja);
             }
+            transaction.commit();
+            System.out.println("Se ha poblado los datos de cajas");
         }catch (IOException e) {
+            if (transaction.isActive()) {
+                transaction.rollback(); // Revertir la transacción en caso de error
+            }
             e.printStackTrace();
         }
     }
