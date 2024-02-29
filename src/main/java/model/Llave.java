@@ -12,17 +12,15 @@ public class Llave {
     private String nombre;
 
     @Column(name = "Precio_llave")
-    private BigDecimal precio;
+    private Float precio;
 
-    @ElementCollection
-    @CollectionTable(name = "Caja_que_abre", joinColumns = @JoinColumn(name = "Nombre_llave"))
-    @Column(name = "Caja")
-    private List<String> cajasQueAbre;
+    @Column(name = "Caja_que_abre")
+    private String cajasQueAbre;
 
     public Llave() {
 
     }
-    public Llave(String nombre, BigDecimal precio, List<String> cajasQueAbre) {
+    public Llave(String nombre, Float precio, String cajasQueAbre) {
         this.nombre = nombre;
         this.precio = precio;
         this.cajasQueAbre = cajasQueAbre;
@@ -32,11 +30,11 @@ public class Llave {
         return nombre;
     }
 
-    public BigDecimal getPrecio() {
+    public Float getPrecio() {
         return precio;
     }
 
-    public List<String> getCajasQueAbre() {
+    public String getCajasQueAbre() {
         return cajasQueAbre;
     }
 
@@ -44,11 +42,11 @@ public class Llave {
         this.nombre = nombre;
     }
 
-    public void setPrecio(BigDecimal precio) {
+    public void setPrecio(Float precio) {
         this.precio = precio;
     }
 
-    public void setCajasQueAbre(List<String> cajasQueAbre) {
+    public void setCajasQueAbre(String cajasQueAbre) {
         this.cajasQueAbre = cajasQueAbre;
     }
 }

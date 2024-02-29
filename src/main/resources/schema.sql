@@ -10,8 +10,8 @@ CREATE TABLE Datos_Armas (
 
 CREATE TABLE Datos_Llaves (
     Nombre_llave VARCHAR(100),
-    Precio_llave DECIMAL(10, 2),
-    Caja_que_abre VARCHAR(255) ARRAY
+    Precio_llave FLOAT(10),
+    Caja_que_abre VARCHAR(255)
 );
 
 CREATE TABLE Nombre_Cajas (

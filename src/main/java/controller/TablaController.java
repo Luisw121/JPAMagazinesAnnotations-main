@@ -68,7 +68,7 @@ public class TablaController {
     }
     public void poblarTablas() {
         poblarDatosArmas();
-        //poblarDatosLlaves();
+        poblarDatosLlaves();
         //poblarDatosSkins();
         //poblarNombreCajas();
     }
@@ -131,25 +131,37 @@ public class TablaController {
 
     private void poblarDatosLlaves() {
         String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_llaves.csv";
+
+        EntityTransaction transaction = entityManager.getTransaction();
+
         try(BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+            transaction.begin();
             String line;
+            br.readLine();
             while ((line = br.readLine()) != null) {
+                line = line.replaceAll("\"", "");
                 String[] data = line.split(",");
 
-                Llave llave = new Llave();
-                llave.setNombre(data[0]);
-                llave.setPrecio(new BigDecimal(data[1]));
+                String nombre = data[0];
+                Float precio = Float.parseFloat(data[1]);
+                String cajaQueAbre = data[2];
 
-                List<String> cajaQueAbre = new ArrayList<>();
-                for (int i = 2; i < data.length; i++) {
-                    cajaQueAbre.add(data[1]);
-
-                }
-                llave.setCajasQueAbre(cajaQueAbre);
+                Llave llave = new Llave(nombre, precio, cajaQueAbre);
 
                 entityManager.persist(llave);
             }
-        }catch (IOException e) {
+            transaction.commit();
+            System.out.println("Se ha poblado los datos de llaves");
+        } catch (IOException e) {
+            if (transaction.isActive()) {
+                transaction.rollback(); // Revertir la transacción en caso de error
+            }
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            if (transaction.isActive()) {
+                transaction.rollback(); // Revertir la transacción en caso de error
+            }
+            System.out.println("No se pudo convertir un valor numérico");
             e.printStackTrace();
         }
     }
