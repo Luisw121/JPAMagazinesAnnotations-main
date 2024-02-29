@@ -58,9 +58,9 @@ public class Main {
             System.out.println("Menú:");
             System.out.println("1. Crear tablas en la base de datos");//LISTO
             System.out.println("2. Eliminar Tablas. ");//LISTO
-            System.out.println("3. Poblar Masivamente las tablas");//
+            System.out.println("3. Poblar Masivamente las tablas");//LISTO
             System.out.println("4. Mostrar Tablas");//
-            System.out.println("5. Seleccionar todos los elementos que contengan u ntexto en concretp");//
+            System.out.println("5. Seleccionar todos los elementos que contengan u ntexto en concreto");//
             System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//
             System.out.println("7. Modificación de diferentes registros");//
             System.out.println("8. ELimincación de un registro en concreto");//
@@ -97,7 +97,7 @@ public class Main {
                 default:
                     System.out.println("Opción no válid. Inténtalo de nuevo.");
             }
-        }while (opcio !=3);
+        }while (opcio !=9);
         entityManager.close();
         entityManagerFactory.close();
     }
