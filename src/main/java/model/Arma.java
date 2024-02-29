@@ -23,7 +23,7 @@ public class Arma {
     private String killAward;
 
     @Column(name = "Running_Speed")
-    private Double runningSpeed;
+    private Float runningSpeed;
 
     @Column(name = "Side")
     private String side;
@@ -31,7 +31,7 @@ public class Arma {
 
     }
 
-    public Arma(Long id, String nombre, Integer damageLMB, Integer damageRMB, String killAward, Double runningSpeed, String side) {
+    public Arma(Long id, String nombre, Integer damageLMB, Integer damageRMB, String killAward, Float runningSpeed, String side) {
         this.id = id;
         this.nombre = nombre;
         this.damageLMB = damageLMB;
@@ -61,7 +61,7 @@ public class Arma {
         return killAward;
     }
 
-    public Double getRunningSpeed() {
+    public Float getRunningSpeed() {
         return runningSpeed;
     }
 
@@ -89,7 +89,7 @@ public class Arma {
         this.killAward = killAward;
     }
 
-    public void setRunningSpeed(Double runningSpeed) {
+    public void setRunningSpeed(Float runningSpeed) {
         this.runningSpeed = runningSpeed;
     }
 

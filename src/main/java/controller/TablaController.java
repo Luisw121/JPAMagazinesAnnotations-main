@@ -82,16 +82,23 @@ public class TablaController {
             String line;
             br.readLine();
             while ((line = br.readLine()) != null) {
+                line = line.replaceAll("\"", "");
                 String[] data = line.split(",");
 
+                String nombre = data[0];
+                String damageLMB = data[1];
+                String damageRMB = data[2];
+                String killAward = data[3];
+                String runningSpeed = data[4];
+                String side = data[5];
 
                 Arma arma = new Arma();
-                arma.setNombre(data[0]);
-                arma.setDamageLMB(Integer.parseInt(data[1]));
-                arma.setDamageRMB(Integer.parseInt(data[2]));
-                arma.setKillAward(data[3]);
-                arma.setRunningSpeed(Double.parseDouble(data[4]));
-                arma.setSide(data[5]);
+                arma.setNombre(nombre);
+                arma.setDamageLMB(parseDamage(damageLMB));
+                arma.setDamageRMB(parseDamage(damageRMB));
+                arma.setKillAward(killAward);
+                arma.setRunningSpeed(Float.parseFloat(runningSpeed));
+                arma.setSide(side);
 
                 entityManager.persist(arma);
             }
@@ -111,6 +118,17 @@ public class TablaController {
             e.printStackTrace();
         }
     }
+
+    private Integer parseDamage(String damage) {
+        String cleanedDamage = damage.replaceAll("[^0-9/]", "");
+
+        String[] parts = damage.split("/");
+        int numerator = Integer.parseInt(parts[0]);
+        int denominator = Integer.parseInt(parts[1]);
+
+        return numerator + denominator;
+    }
+
     private void poblarDatosLlaves() {
         String csvFile = "/home/dam2a/Baixades/Acess a dades/JPAMagazinesAnnotations-main/src/main/resources/CSV/datos_llaves.csv";
         try(BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
