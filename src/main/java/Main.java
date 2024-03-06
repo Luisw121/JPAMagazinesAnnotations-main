@@ -61,8 +61,8 @@ public class Main {
             System.out.println("2. Eliminar Tablas. ");//LISTO
             System.out.println("3. Poblar Masivamente las tablas");//LISTO
             System.out.println("4. Mostrar Tablas");//LISTO
-            System.out.println("5. Seleccionar todos los elementos que contengan un texto en concreto");//listo
-            System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//LISTO
+            System.out.println("5. Seleccionar todos los elementos que contengan un texto en concreto");//LISTO
+            System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//
             System.out.println("7. Modificación de diferentes registros");//
             System.out.println("8. ELimincación de un registro en concreto");//
             System.out.println("9. Eliminación de un conjunto de registros");//
@@ -89,6 +89,9 @@ public class Main {
                     List<Arma> armasEncontradas = tablaController.seleccionarElementosPorTexto(Arma.class, textoBusqueda);
                     for (Arma arma : armasEncontradas) {
                         System.out.println(arma);
+                    }
+                    if (armasEncontradas.isEmpty()){
+                        System.out.println("No se ha encontrado nada");
                     }
                     break;
 
