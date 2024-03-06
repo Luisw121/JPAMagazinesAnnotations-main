@@ -96,4 +96,16 @@ public class Arma {
     public void setSide(String side) {
         this.side = side;
     }
+    @Override
+    public String toString() {
+        return "Arma:" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", damageLMB=" + damageLMB +
+                ", damageRMB=" + damageRMB +
+                ", killAward='" + killAward + '\'' +
+                ", runningSpeed=" + runningSpeed +
+                ", side='" + side + '\'' +
+                '.';
+    }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import controller.TablaController;
+import model.Arma;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -59,9 +60,9 @@ public class Main {
             System.out.println("1. Crear tablas en la base de datos");//LISTO
             System.out.println("2. Eliminar Tablas. ");//LISTO
             System.out.println("3. Poblar Masivamente las tablas");//LISTO
-            System.out.println("4. Mostrar Tablas");//
-            System.out.println("5. Seleccionar todos los elementos que contengan un texto en concreto");//
-            System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//
+            System.out.println("4. Mostrar Tablas");//LISTO
+            System.out.println("5. Seleccionar todos los elementos que contengan un texto en concreto");//listo
+            System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//LISTO
             System.out.println("7. Modificación de diferentes registros");//
             System.out.println("8. ELimincación de un registro en concreto");//
             System.out.println("9. Eliminación de un conjunto de registros");//
@@ -79,11 +80,18 @@ public class Main {
                     tablaController.poblarTablas();
                     break;
                 case 4:
-                    //
+                    tablaController.monstrarTablas();
                     break;
                 case 5:
-                    //
+                    scanner.nextLine(); // Limpiar el buffer de entrada
+                    System.out.print("Introduce el texto a buscar: ");
+                    String textoBusqueda = scanner.nextLine();
+                    List<Arma> armasEncontradas = tablaController.seleccionarElementosPorTexto(Arma.class, textoBusqueda);
+                    for (Arma arma : armasEncontradas) {
+                        System.out.println(arma);
+                    }
                     break;
+
                 case 6:
                     //
                     break;

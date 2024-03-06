@@ -49,4 +49,12 @@ public class Llave {
     public void setCajasQueAbre(String cajasQueAbre) {
         this.cajasQueAbre = cajasQueAbre;
     }
+    @Override
+    public String toString() {
+        return "Llave:" +
+                "nombre='" + nombre + '\'' +
+                ", precio=" + precio +
+                ", cajasQueAbre='" + cajasQueAbre + '\'' +
+                '.';
+    }
 }

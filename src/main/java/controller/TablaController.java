@@ -7,11 +7,12 @@ import model.Skin;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -224,4 +225,44 @@ public class TablaController {
             e.printStackTrace();
         }
     }
+    public void monstrarTablas() {
+        List<Arma> armas = entityManager.createQuery("SELECT a FROM Arma a", Arma.class).getResultList();
+        List<Llave> llaves = entityManager.createQuery("SELECT l FROM Llave l", Llave.class).getResultList();
+        List<Skin> skins = entityManager.createQuery("SELECT s FROM Skin s", Skin.class).getResultList();
+        List<Caja> cajas = entityManager.createQuery("SELECT c FROM Caja c", Caja.class).getResultList();
+        System.out.println("__Armas__");
+        for (Arma arma : armas) {
+            System.out.println(arma);
+        }
+        System.out.println("__Llaves__");
+        for (Llave llave : llaves) {
+            System.out.println(llave);
+        }
+        System.out.println("__Skins__");
+        for (Skin skin : skins) {
+            System.out.println(skin);
+        }
+        System.out.println("__Caja__");
+        for (Caja caja : cajas) {
+            System.out.println(caja);
+        }
+    }
+    public <T> List<T> seleccionarElementosPorTexto(Class<T> clase, String texto) {
+        String nombreTabla = clase.getSimpleName();
+        Metamodel metamodel = entityManager.getMetamodel();
+        EntityType<T> entityType = metamodel.entity(clase);
+
+        String queryJPQL = "SELECT e FROM " + nombreTabla + " e WHERE ";
+
+        for (javax.persistence.metamodel.Attribute<? super T, ?> attribute : entityType.getDeclaredAttributes()) {
+            if (attribute.getJavaType() == String.class) {
+                queryJPQL += "e." + attribute.getName() + " LIKE '%" + texto + "%' OR ";
+            }
+        }
+        queryJPQL = queryJPQL.substring(0, queryJPQL.lastIndexOf(" OR "));
+
+        Query query = entityManager.createQuery(queryJPQL, clase);
+        return query.getResultList();
+    }
+
 }
