@@ -65,8 +65,8 @@ public class Main {
             System.out.println("5. Seleccionar todos los elementos que contengan un texto en concreto");//LISTO
             System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//LISTO
             System.out.println("7. Modificación de un registro por nombre");//LISTO
-            System.out.println("8. ELimincación de un registro por nombre");//LISTO
-            System.out.println("9. Modificación de muchos registros en concreto");//
+            System.out.println("8. Modificación de varios registros en concreto");//CASI LISTO
+            System.out.println("9. Salir del programa");//LISTO
             System.out.print("Seleccione una opción: ");
             opcio = scanner.nextInt();
 
@@ -152,13 +152,11 @@ public class Main {
                         System.out.println("No se ha encontrado ningún elemento con ese nombre.");
                     }
                     break;
-
                 case 8:
                     tablaController.modificarRegistros(Skin.class);
-
                     break;
                 case 9:
-                    System.out.println("Saliendo del programa.");
+                    System.out.println("Saliendo del programa....");
                     break;
                 default:
                     System.out.println("Opción no válid. Inténtalo de nuevo.");
