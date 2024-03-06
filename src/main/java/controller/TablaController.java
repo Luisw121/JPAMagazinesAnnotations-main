@@ -8,12 +8,18 @@ import model.Skin;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class TablaController {
@@ -263,6 +269,45 @@ public class TablaController {
 
         Query query = entityManager.createQuery(queryJPQL, clase);
         return query.getResultList();
+    }
+    public <T> T seleccionarElementoPorNombre(Class<T> clase, String nombre) {
+        String queryJPQL = "SELECT e FROM " + clase.getSimpleName() + " e WHERE e.nombre = :nombre";
+        TypedQuery<T> query = entityManager.createQuery(queryJPQL, clase);
+        query.setParameter("nombre", nombre);
+        List<T> resultados = query.getResultList();
+        return resultados.isEmpty() ? null : resultados.get(0);
+    }
+
+    public <T> T EliminarElementoPorNombre(Class<T> clase, String nombre) {
+        String queryJPQL = "SELECT e FROM " + clase.getSimpleName() + " e WHERE e.nombre = :nombre";
+        TypedQuery<T> query = entityManager.createQuery(queryJPQL, clase);
+        query.setParameter("nombre", nombre);
+        List<T> resultados = query.getResultList();
+        return resultados.isEmpty() ? null : resultados.get(0);
+    }
+    public <T> void modificarRegistros(Class<T> clase) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Introduzca el nombre del campo que desea modificar:");
+        String campo = scanner.nextLine();
+
+        System.out.println("Introduzca el valor antiguo:");
+        String valorAntiguo = scanner.nextLine();
+
+        System.out.println("Introduzca el valor nuevo:");
+        String valorNuevo = scanner.nextLine();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<T> update = cb.createCriteriaUpdate(clase);
+        Root<T> root = update.from(clase);
+
+        // Construir la condición para la actualización
+        Predicate condicion = cb.equal(root.get(campo), valorAntiguo);
+        update.set(root.get(campo), valorNuevo);
+        update.where(condicion);
+
+        // Ejecutar la actualización y obtener la cantidad de registros modificados
+        int cantidadModificados = entityManager.createQuery(update).executeUpdate();
+        System.out.println("Se han modificado " + cantidadModificados + " registros en la tabla " + clase.getSimpleName());
     }
 
 }

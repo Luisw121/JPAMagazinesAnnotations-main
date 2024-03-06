@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import controller.TablaController;
 import model.Arma;
+import model.Skin;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
@@ -62,10 +63,10 @@ public class Main {
             System.out.println("3. Poblar Masivamente las tablas");//LISTO
             System.out.println("4. Mostrar Tablas");//LISTO
             System.out.println("5. Seleccionar todos los elementos que contengan un texto en concreto");//LISTO
-            System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//
-            System.out.println("7. Modificación de diferentes registros");//
-            System.out.println("8. ELimincación de un registro en concreto");//
-            System.out.println("9. Eliminación de un conjunto de registros");//
+            System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//LISTO
+            System.out.println("7. Modificación de un registro por nombre");//LISTO
+            System.out.println("8. ELimincación de un registro por nombre");//LISTO
+            System.out.println("9. Modificación de muchos registros en concreto");//
             System.out.print("Seleccione una opción: ");
             opcio = scanner.nextInt();
 
@@ -94,13 +95,67 @@ public class Main {
                         System.out.println("No se ha encontrado nada");
                     }
                     break;
-
                 case 6:
-                    //
+                    scanner.nextLine();
+                    System.out.print("Introduce el nombre del elemento a modificar: ");
+                    String nombreElemento = scanner.nextLine();
+                    Arma armaAModificar = tablaController.seleccionarElementoPorNombre(Arma.class, nombreElemento);
+                    if (armaAModificar != null) {
+                        System.out.println("Elemento seleccionado:");
+                        System.out.println(armaAModificar);
+
+                        //Modificaciónes
+                        System.out.println("Introduce los nuevos valores para el elemento:");
+                        System.out.print("Nuevo nombre: ");
+                        String nuevoNombre = scanner.nextLine();
+                        System.out.print("Nuevo daño LMB: ");
+                        int nuevoDamageLMB = scanner.nextInt();
+                        System.out.print("Nuevo daño RMB: ");
+                        int nuevoDamageRMB = scanner.nextInt();
+                        System.out.print("Nuevo premio por muerte: ");
+                        scanner.nextLine();
+                        String nuevoKillAward = scanner.nextLine();
+                        System.out.print("Nueva velocidad de movimiento: ");
+                        float nuevaRunningSpeed = scanner.nextFloat();
+                        System.out.print("Nuevo lado: ");
+                        String nuevoSide = scanner.next();
+
+                        //Aplicamos las modificaciones
+                        armaAModificar.setNombre(nuevoNombre);
+                        armaAModificar.setDamageLMB(nuevoDamageLMB);
+                        armaAModificar.setDamageRMB(nuevoDamageRMB);
+                        armaAModificar.setKillAward(nuevoKillAward);
+                        armaAModificar.setRunningSpeed(nuevaRunningSpeed);
+                        armaAModificar.setSide(nuevoSide);
+
+                        //Guardamos los cambios
+                        entityManager.getTransaction().begin();
+                        entityManager.merge(armaAModificar);
+                        entityManager.getTransaction().commit();
+
+                        System.out.println("El elemento ha sido modificado con éxito.");
+                    } else {
+                        System.out.println("No se ha encontrado ningún elemento con ese nombre.");
+                    }
                     break;
                 case 7:
+                    scanner.nextLine(); // Limpiar el buffer de entrada
+                    System.out.print("Introduce el nombre del elemento a eliminar: ");
+                    String nombreElementoEliminar = scanner.nextLine();
+                    Arma armaAEliminar = tablaController.EliminarElementoPorNombre(Arma.class, nombreElementoEliminar);
+                    if (armaAEliminar != null) {
+                        entityManager.getTransaction().begin();
+                        entityManager.remove(armaAEliminar);
+                        entityManager.getTransaction().commit();
+                        System.out.println("El elemento ha sido eliminado correctamente.");
+                    } else {
+                        System.out.println("No se ha encontrado ningún elemento con ese nombre.");
+                    }
                     break;
+
                 case 8:
+                    tablaController.modificarRegistros(Skin.class);
+
                     break;
                 case 9:
                     System.out.println("Saliendo del programa.");
