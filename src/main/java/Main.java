@@ -64,8 +64,8 @@ public class Main {
             System.out.println("4. Mostrar Tablas");//LISTO
             System.out.println("5. Seleccionar todos los elementos que contengan un texto en concreto");//LISTO
             System.out.println("6. Seleccionar un elemento en concreto y modificarlo");//LISTO
-            System.out.println("7. Modificación de un registro por nombre");//LISTO
-            System.out.println("8. Modificación de varios registros en concreto");//CASI LISTO
+            System.out.println("7. Eliminación de un elemento por su nombre");//LISTO
+            System.out.println("8. Eliminar un conjunto de registros ");//CASI LISTO
             System.out.println("9. Salir del programa");//LISTO
             System.out.print("Seleccione una opción: ");
             opcio = scanner.nextInt();
@@ -99,7 +99,7 @@ public class Main {
                     scanner.nextLine();
                     System.out.print("Introduce el nombre del elemento a modificar: ");
                     String nombreElemento = scanner.nextLine();
-                    Arma armaAModificar = tablaController.seleccionarElementoPorNombre(Arma.class, nombreElemento);
+                    Arma armaAModificar = tablaController.seleccionarElementoPorAtributo(Arma.class, "nombre", nombreElemento);
                     if (armaAModificar != null) {
                         System.out.println("Elemento seleccionado:");
                         System.out.println(armaAModificar);
@@ -153,7 +153,15 @@ public class Main {
                     }
                     break;
                 case 8:
-                    tablaController.modificarRegistros(Skin.class);
+                    scanner.nextLine();
+                    System.out.println("Introduce el nombre del elemento a eliminar");
+                    String nombreElementoEliminar1 = scanner.nextLine();
+                    int cantidadEliminada = tablaController.eliminarElementosPorNombre(Arma.class, nombreElementoEliminar1);
+                    if (cantidadEliminada > 0) {
+                        System.out.println("Se ha eliminado " + cantidadEliminada + " elementos");
+                    } else {
+                        System.out.println("No se ha encontrado ningún elemento con este nombre");
+                    }
                     break;
                 case 9:
                     System.out.println("Saliendo del programa....");

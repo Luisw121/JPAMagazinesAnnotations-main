@@ -270,10 +270,10 @@ public class TablaController {
         Query query = entityManager.createQuery(queryJPQL, clase);
         return query.getResultList();
     }
-    public <T> T seleccionarElementoPorNombre(Class<T> clase, String nombre) {
-        String queryJPQL = "SELECT e FROM " + clase.getSimpleName() + " e WHERE e.nombre = :nombre";
+    public <T> T seleccionarElementoPorAtributo(Class<T> clase,String nombreAtributo, Object valorAtributo) {
+        String queryJPQL = "SELECT e FROM " + clase.getSimpleName() + " e WHERE e." + nombreAtributo + " = :valor";
         TypedQuery<T> query = entityManager.createQuery(queryJPQL, clase);
-        query.setParameter("nombre", nombre);
+        query.setParameter("valor", valorAtributo);
         List<T> resultados = query.getResultList();
         return resultados.isEmpty() ? null : resultados.get(0);
     }
@@ -285,29 +285,31 @@ public class TablaController {
         List<T> resultados = query.getResultList();
         return resultados.isEmpty() ? null : resultados.get(0);
     }
-    public <T> void modificarRegistros(Class<T> clase) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Introduzca el nombre del campo que desea modificar:");
-        String campo = scanner.nextLine();
+    public <T> int eliminarElementosPorNombre(Class<T> clase, String nombre) {
+        String nombreTabla = clase.getSimpleName();
+        Metamodel metamodel = entityManager.getMetamodel();
+        EntityType<T> entityType = metamodel.entity(clase);
 
-        System.out.println("Introduzca el valor antiguo:");
-        String valorAntiguo = scanner.nextLine();
+        // Obtener el nombre del atributo que contiene el nombre
+        String nombreAtributo = null;
+        for (javax.persistence.metamodel.Attribute<? super T, ?> attribute : entityType.getDeclaredAttributes()) {
+            if (attribute.getJavaType() == String.class) {
+                nombreAtributo = attribute.getName();
+                break;
+            }
+        }
 
-        System.out.println("Introduzca el valor nuevo:");
-        String valorNuevo = scanner.nextLine();
+        if (nombreAtributo == null) {
+            throw new IllegalArgumentException("La clase " + clase.getSimpleName() + " no contiene atributos de tipo String.");
+        }
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaUpdate<T> update = cb.createCriteriaUpdate(clase);
-        Root<T> root = update.from(clase);
+        String queryJPQL = "DELETE FROM " + nombreTabla + " e WHERE e." + nombreAtributo + " = :nombre";
 
-        // Construir la condición para la actualización
-        Predicate condicion = cb.equal(root.get(campo), valorAntiguo);
-        update.set(root.get(campo), valorNuevo);
-        update.where(condicion);
-
-        // Ejecutar la actualización y obtener la cantidad de registros modificados
-        int cantidadModificados = entityManager.createQuery(update).executeUpdate();
-        System.out.println("Se han modificado " + cantidadModificados + " registros en la tabla " + clase.getSimpleName());
+        entityManager.getTransaction().begin(); // Iniciar la transacción
+        Query query = entityManager.createQuery(queryJPQL);
+        query.setParameter("nombre", nombre);
+        int cantidadEliminada = query.executeUpdate();
+        entityManager.getTransaction().commit(); // Confirmar la transacción
+        return cantidadEliminada;
     }
-
 }
